@@ -316,54 +316,264 @@ const VehicleTheftDashboard = () => {
     </div>
   );
 
-  const renderGeographic = () => (
-    <div className="space-y-6">
-      <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
-        <h3 className="text-lg font-semibold mb-4">Regional Theft Analysis</h3>
-        <div className="overflow-x-auto">
-          <table className="min-w-full">
-            <thead>
-              <tr className="border-b border-gray-200">
-                <th className="text-left py-3 px-4 font-semibold">Region</th>
-                <th className="text-right py-3 px-4 font-semibold">Total Thefts</th>
-                <th className="text-right py-3 px-4 font-semibold">Population</th>
-                <th className="text-right py-3 px-4 font-semibold">Rate per 100k</th>
-                <th className="text-center py-3 px-4 font-semibold">Risk Level</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.regionalData.map((region, index) => (
-                <tr key={index} className="border-b border-gray-100 hover:bg-gray-50">
-                  <td className="py-3 px-4 font-medium">{region.region}</td>
-                  <td className="py-3 px-4 text-right">{formatNumber(region.thefts)}</td>
-                  <td className="py-3 px-4 text-right">{formatNumber(region.population)}</td>
-                  <td className="py-3 px-4 text-right font-bold">{region.rate}</td>
-                  <td className="py-3 px-4 text-center">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getRiskColor(region.risk)}`}>
-                      {region.risk}
-                    </span>
-                  </td>
+  const renderGeographic = () => {
+    // Prepare data for scatter plot
+    const scatterData = data.regionalData.map(region => ({
+      ...region,
+      density: region.density || (region.thefts / region.population * 1000000) // Calculate density if not available
+    }));
+
+    return (
+      <div className="space-y-6">
+        {/* Regional Map Visualization */}
+        <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+          <h3 className="text-lg font-semibold mb-4">New Zealand Regional Theft Risk Map</h3>
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            {/* Map Area - Visual representation */}
+            <div className="lg:col-span-3">
+              <div className="bg-gradient-to-br from-blue-50 to-green-50 rounded-lg p-6 h-96 relative overflow-hidden">
+                <div className="text-center text-gray-600 mb-4">
+                  <MapPin className="w-6 h-6 mx-auto mb-2" />
+                  <p className="text-sm">Interactive Regional Risk Map</p>
+                </div>
+                
+                {/* Simulated map regions - you can replace this with actual map component */}
+                <div className="grid grid-cols-4 gap-2 h-full">
+                  {data.regionalData.slice(0, 16).map((region, index) => {
+                    const getRiskMapColor = (risk) => {
+                      switch (risk) {
+                        case 'Very High': return 'bg-red-600 hover:bg-red-700';
+                        case 'High': return 'bg-orange-500 hover:bg-orange-600';
+                        case 'Medium': return 'bg-yellow-500 hover:bg-yellow-600';
+                        case 'Low': return 'bg-green-500 hover:bg-green-600';
+                        default: return 'bg-gray-400 hover:bg-gray-500';
+                      }
+                    };
+
+                    return (
+                      <div
+                        key={index}
+                        className={`${getRiskMapColor(region.risk)} rounded-lg p-2 cursor-pointer transition-all duration-200 text-white text-xs flex flex-col justify-center items-center shadow-md hover:shadow-lg transform hover:scale-105`}
+                        title={`${region.region}: ${region.thefts} thefts (${region.rate} per 100k)`}
+                      >
+                        <div className="font-semibold text-center leading-tight">
+                          {region.region.length > 10 ? region.region.substring(0, 8) + '...' : region.region}
+                        </div>
+                        <div className="text-xs opacity-90 mt-1">
+                          {region.thefts} thefts
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+            {/* Legend and Summary */}
+            <div className="space-y-4">
+              <div>
+                <h4 className="font-semibold mb-3">Risk Level Legend</h4>
+                <div className="space-y-2">
+                  {[
+                    { level: 'Very High', color: 'bg-red-600', count: data.regionalData.filter(r => r.risk === 'Very High').length },
+                    { level: 'High', color: 'bg-orange-500', count: data.regionalData.filter(r => r.risk === 'High').length },
+                    { level: 'Medium', color: 'bg-yellow-500', count: data.regionalData.filter(r => r.risk === 'Medium').length },
+                    { level: 'Low', color: 'bg-green-500', count: data.regionalData.filter(r => r.risk === 'Low').length }
+                  ].map((item, index) => (
+                    <div key={index} className="flex items-center space-x-2">
+                      <div className={`w-4 h-4 rounded ${item.color}`}></div>
+                      <span className="text-sm font-medium">{item.level}</span>
+                      <span className="text-xs text-gray-500">({item.count} regions)</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="bg-gray-50 rounded-lg p-4">
+                <h4 className="font-semibold mb-2">Quick Stats</h4>
+                <div className="space-y-1 text-sm">
+                  <div>Total Regions: <span className="font-medium">{data.regionalData.length}</span></div>
+                  <div>Highest Risk: <span className="font-medium text-red-600">{data.keyMetrics.highestRiskRegion}</span></div>
+                  <div>Total Thefts: <span className="font-medium">{formatNumber(data.regionalData.reduce((sum, r) => sum + r.thefts, 0))}</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Population vs Thefts Scatter Plot */}
+        <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+          <h3 className="text-lg font-semibold mb-4">Population vs Vehicle Thefts Analysis</h3>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2">
+              <ResponsiveContainer width="100%" height={400}>
+                <ResponsiveContainer width="100%" height={400}>
+                  <div className="relative">
+                    {/* Custom Scatter Plot using SVG */}
+                    <svg width="100%" height="400" className="border rounded-lg bg-gray-50">
+                      {/* Background grid */}
+                      <defs>
+                        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#e5e7eb" strokeWidth="1"/>
+                        </pattern>
+                      </defs>
+                      <rect width="100%" height="100%" fill="url(#grid)" />
+                      
+                      {/* Scatter points */}
+                      {scatterData.map((region, index) => {
+                        const maxPop = Math.max(...scatterData.map(r => r.population));
+                        const maxThefts = Math.max(...scatterData.map(r => r.thefts));
+                        const x = (region.population / maxPop) * 500 + 60;
+                        const y = 350 - (region.thefts / maxThefts) * 300;
+                        const radius = Math.max(4, Math.min(20, (region.rate / 100) * 15));
+                        
+                        const getPointColor = (risk) => {
+                          switch (risk) {
+                            case 'Very High': return '#dc2626';
+                            case 'High': return '#ea580c';
+                            case 'Medium': return '#d97706';
+                            case 'Low': return '#16a34a';
+                            default: return '#6b7280';
+                          }
+                        };
+
+                        return (
+                          <g key={index}>
+                            <circle
+                              cx={x}
+                              cy={y}
+                              r={radius}
+                              fill={getPointColor(region.risk)}
+                              fillOpacity="0.7"
+                              stroke="#fff"
+                              strokeWidth="2"
+                              className="hover:fillOpacity-90 cursor-pointer"
+                            />
+                            <text
+                              x={x}
+                              y={y - radius - 5}
+                              textAnchor="middle"
+                              className="text-xs font-medium fill-gray-700"
+                            >
+                              {region.region.length > 8 ? region.region.substring(0, 6) + '..' : region.region}
+                            </text>
+                          </g>
+                        );
+                      })}
+                      
+                      {/* Axes labels */}
+                      <text x="300" y="390" textAnchor="middle" className="text-sm font-medium fill-gray-600">
+                        Population
+                      </text>
+                      <text x="20" y="200" textAnchor="middle" className="text-sm font-medium fill-gray-600" transform="rotate(-90, 20, 200)">
+                        Number of Thefts
+                      </text>
+                    </svg>
+                  </div>
+                </ResponsiveContainer>
+              </ResponsiveContainer>
+            </div>
+
+            {/* Analysis insights */}
+            <div className="space-y-4">
+              <div>
+                <h4 className="font-semibold mb-3">Key Insights</h4>
+                <div className="space-y-3">
+                  <div className="p-3 bg-red-50 border-l-4 border-red-500">
+                    <p className="text-sm font-medium text-red-900">Population ≠ Risk</p>
+                    <p className="text-xs text-red-700">Some smaller regions have higher theft rates per capita</p>
+                  </div>
+                  <div className="p-3 bg-blue-50 border-l-4 border-blue-500">
+                    <p className="text-sm font-medium text-blue-900">Urban Concentration</p>
+                    <p className="text-xs text-blue-700">Large cities show both high volume and high rates</p>
+                  </div>
+                  <div className="p-3 bg-green-50 border-l-4 border-green-500">
+                    <p className="text-sm font-medium text-green-900">Resource Allocation</p>
+                    <p className="text-xs text-green-700">Focus on rate-adjusted deployment strategies</p>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h4 className="font-semibold mb-3">Correlation Analysis</h4>
+                <div className="text-sm space-y-2">
+                  <div className="flex justify-between">
+                    <span>Population vs Thefts:</span>
+                    <span className="font-medium">Strong positive</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Size indicates:</span>
+                    <span className="font-medium">Theft rate per 100k</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Color indicates:</span>
+                    <span className="font-medium">Risk level</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Regional Theft Analysis Table */}
+        <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+          <h3 className="text-lg font-semibold mb-4">Detailed Regional Analysis</h3>
+          <div className="overflow-x-auto">
+            <table className="min-w-full">
+              <thead>
+                <tr className="border-b border-gray-200">
+                  <th className="text-left py-3 px-4 font-semibold">Region</th>
+                  <th className="text-right py-3 px-4 font-semibold">Total Thefts</th>
+                  <th className="text-right py-3 px-4 font-semibold">Population</th>
+                  <th className="text-right py-3 px-4 font-semibold">Rate per 100k</th>
+                  <th className="text-center py-3 px-4 font-semibold">Risk Level</th>
+                  <th className="text-right py-3 px-4 font-semibold">% of Total</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {data.regionalData.map((region, index) => {
+                  const totalThefts = data.regionalData.reduce((sum, r) => sum + r.thefts, 0);
+                  const percentage = (region.thefts / totalThefts * 100).toFixed(1);
+                  
+                  return (
+                    <tr key={index} className="border-b border-gray-100 hover:bg-gray-50">
+                      <td className="py-3 px-4 font-medium">{region.region}</td>
+                      <td className="py-3 px-4 text-right">{formatNumber(region.thefts)}</td>
+                      <td className="py-3 px-4 text-right">{formatNumber(region.population)}</td>
+                      <td className="py-3 px-4 text-right font-bold">{region.rate}</td>
+                      <td className="py-3 px-4 text-center">
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getRiskColor(region.risk)}`}>
+                          {region.risk}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4 text-right text-sm">{percentage}%</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Regional Theft Rates Comparison */}
+        <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+          <h3 className="text-lg font-semibold mb-4">Regional Theft Rates Comparison</h3>
+          <ResponsiveContainer width="100%" height={400}>
+            <BarChart data={data.regionalData} layout="horizontal">
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis type="number" />
+              <YAxis dataKey="region" type="category" width={100} />
+              <Tooltip 
+                formatter={(value, name) => [value, 'Rate per 100k']}
+                labelFormatter={(label) => `Region: ${label}`}
+              />
+              <Bar dataKey="rate" fill="#f59e0b" />
+            </BarChart>
+          </ResponsiveContainer>
         </div>
       </div>
-
-      <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
-        <h3 className="text-lg font-semibold mb-4">Regional Theft Rates Comparison</h3>
-        <ResponsiveContainer width="100%" height={400}>
-          <BarChart data={data.regionalData} layout="horizontal">
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis type="number" />
-            <YAxis dataKey="region" type="category" width={100} />
-            <Tooltip formatter={(value) => [value, 'Rate per 100k']} />
-            <Bar dataKey="rate" fill="#f59e0b" />
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
-    </div>
-  );
+    );
+  };
 
   const renderAnalytics = () => (
     <div className="space-y-6">

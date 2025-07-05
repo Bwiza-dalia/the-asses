@@ -1,0 +1,292 @@
+{
+  "monthlyData": [
+    {
+      "month": "Jan",
+      "thefts": 740,
+      "quarter": 1
+    },
+    {
+      "month": "Feb",
+      "thefts": 763,
+      "quarter": 1
+    },
+    {
+      "month": "Mar",
+      "thefts": 1053,
+      "quarter": 1
+    },
+    {
+      "month": "Apr",
+      "thefts": 329,
+      "quarter": 2
+    },
+    {
+      "month": "Oct",
+      "thefts": 464,
+      "quarter": 4
+    },
+    {
+      "month": "Nov",
+      "thefts": 560,
+      "quarter": 4
+    },
+    {
+      "month": "Dec",
+      "thefts": 644,
+      "quarter": 4
+    }
+  ],
+  "dayOfWeekData": [
+    {
+      "day": "Mon",
+      "thefts": 767
+    },
+    {
+      "day": "Tue",
+      "thefts": 711
+    },
+    {
+      "day": "Wed",
+      "thefts": 629
+    },
+    {
+      "day": "Thu",
+      "thefts": 619
+    },
+    {
+      "day": "Fri",
+      "thefts": 655
+    },
+    {
+      "day": "Sat",
+      "thefts": 577
+    },
+    {
+      "day": "Sun",
+      "thefts": 595
+    }
+  ],
+  "regionalData": [
+    {
+      "region": "Gisborne",
+      "thefts": 176,
+      "population": 52100,
+      "rate": 337.8,
+      "risk": "Very High"
+    },
+    {
+      "region": "Nelson",
+      "thefts": 92,
+      "population": 54500,
+      "rate": 168.8,
+      "risk": "Very High"
+    },
+    {
+      "region": "Bay of Plenty",
+      "thefts": 446,
+      "population": 347700,
+      "rate": 128.3,
+      "risk": "Very High"
+    },
+    {
+      "region": "Northland",
+      "thefts": 234,
+      "population": 201500,
+      "rate": 116.1,
+      "risk": "Very High"
+    },
+    {
+      "region": "Canterbury",
+      "thefts": 660,
+      "population": 655000,
+      "rate": 100.8,
+      "risk": "High"
+    },
+    {
+      "region": "Auckland",
+      "thefts": 1638,
+      "population": 1695200,
+      "rate": 96.6,
+      "risk": "High"
+    },
+    {
+      "region": "Taranaki",
+      "thefts": 112,
+      "population": 127300,
+      "rate": 88.0,
+      "risk": "High"
+    },
+    {
+      "region": "Wellington",
+      "thefts": 420,
+      "population": 543500,
+      "rate": 77.3,
+      "risk": "Medium"
+    },
+    {
+      "region": "Waikato",
+      "thefts": 371,
+      "population": 513800,
+      "rate": 72.2,
+      "risk": "Medium"
+    },
+    {
+      "region": "Otago",
+      "thefts": 139,
+      "population": 246000,
+      "rate": 56.5,
+      "risk": "Medium"
+    },
+    {
+      "region": "Hawke's Bay",
+      "thefts": 100,
+      "population": 182700,
+      "rate": 54.7,
+      "risk": "Low"
+    },
+    {
+      "region": "Manawat\u016b-Whanganui",
+      "thefts": 139,
+      "population": 258200,
+      "rate": 53.8,
+      "risk": "Low"
+    },
+    {
+      "region": "Southland",
+      "thefts": 26,
+      "population": 102400,
+      "rate": 25.4,
+      "risk": "Low"
+    }
+  ],
+  "vehicleTypeData": [
+    {
+      "type": "Stationwagon",
+      "count": 945,
+      "percentage": 20.8,
+      "color": "#8884d8"
+    },
+    {
+      "type": "Saloon",
+      "count": 851,
+      "percentage": 18.7,
+      "color": "#82ca9d"
+    },
+    {
+      "type": "Hatchback",
+      "count": 644,
+      "percentage": 14.1,
+      "color": "#ffc658"
+    },
+    {
+      "type": "Trailer",
+      "count": 582,
+      "percentage": 12.8,
+      "color": "#ff7300"
+    },
+    {
+      "type": "Utility",
+      "count": 466,
+      "percentage": 10.2,
+      "color": "#e74c3c"
+    },
+    {
+      "type": "Roadbike",
+      "count": 297,
+      "percentage": 6.5,
+      "color": "#9b59b6"
+    },
+    {
+      "type": "Moped",
+      "count": 187,
+      "percentage": 4.1,
+      "color": "#34495e"
+    },
+    {
+      "type": "Light Van",
+      "count": 154,
+      "percentage": 3.4,
+      "color": "#95a5a6"
+    },
+    {
+      "type": "Boat Trailer",
+      "count": 105,
+      "percentage": 2.3,
+      "color": "#2ecc71"
+    },
+    {
+      "type": "Trailer - Heavy",
+      "count": 90,
+      "percentage": 2.0,
+      "color": "#e67e22"
+    }
+  ],
+  "makeTypeData": [
+    {
+      "type": "Luxury",
+      "count": 190,
+      "percentage": 4.2
+    },
+    {
+      "type": "Standard",
+      "count": 4348,
+      "percentage": 95.5
+    },
+    {
+      "type": "Unknown",
+      "count": 15,
+      "percentage": 0.3
+    }
+  ],
+  "keyMetrics": {
+    "totalThefts": 4553,
+    "dailyAverage": 25.2,
+    "recoveryRate": 67.8,
+    "clearanceRate": 34.2,
+    "highestRiskRegion": "Gisborne",
+    "peakDay": "Monday",
+    "peakMonth": "March"
+  },
+  "riskFactors": [
+    {
+      "factor": "Weekend (Fri-Sun, peak: Monday)",
+      "impact": "High",
+      "percentage": 40.1
+    },
+    {
+      "factor": "Urban Areas (Gisborne, Nelson, Bay of Plenty)",
+      "impact": "Very High",
+      "percentage": 15.7
+    },
+    {
+      "factor": "Vehicles 1-5 years old (peak age: 16)",
+      "impact": "Medium",
+      "percentage": 11.9
+    },
+    {
+      "factor": "Luxury Vehicles",
+      "impact": "Medium",
+      "percentage": 4.2
+    },
+    {
+      "factor": "Most Targeted: Stationwagon",
+      "impact": "Very High",
+      "percentage": 20.8
+    }
+  ],
+  "lastUpdated": "April 2022",
+  "analysisMetadata": {
+    "totalRecords": 4553,
+    "dateRange": "2021-10-07 to 2022-04-06",
+    "regionsAnalyzed": 13,
+    "vehicleTypesAnalyzed": 26,
+    "makesAnalyzed": 139,
+    "analysisDate": "2025-07-05 13:22:09",
+    "dataQuality": {
+      "missingVehicleTypes": "0",
+      "missingMakes": "0",
+      "missingRegions": "0",
+      "validRecords": 4553
+    }
+  }
+}
