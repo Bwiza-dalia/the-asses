@@ -53,9 +53,3 @@ Data-driven analysis of vehicle theft patterns across New Zealand to support evi
 - **Interactive dashboard** for real-time data exploration
 - **Strategic recommendations** for police deployment
 - **Executive presentation** for decision makers
-
-## Expected Impact
-- **25% reduction** in vehicle theft rates within 12 months
-- **15% improvement** in high-risk area security (Gisborne focus)
-- **20% reduction** in Monday peak incidents
-- **$17.1M annual savings** through optimized resource deployment
